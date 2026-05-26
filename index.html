@@ -92,7 +92,9 @@
   <div class="passage-box">
     <h3>★ 다음 글을 읽고, 물음에 답해 봅시다.</h3>
     <p>Many people all over the world have played soccer for a long time. But did you know that people in Europe couldn't play soccer at certain times during the Middle Ages?</p>
-    <p>In soccer games, two teams of eleven players use a ball to score goals. People in the Middle Ages played soccer almost the same way, but there were big differences. Villages played against each other, and everyone in the village could join one team! Some teams had 300 to 500 players. The players tried to take the ball to their villages to win. They wrestled, punched, and kicked to win because there were no rules to control the game. Sometimes, the games lasted all day. They could use any aggressive behavior, so a lot of people were hurt. The games became too <span class="blank-in-text">( 빈칸 )</span>. King Edward III of Scotland also announced in 1424, "No man shall play soccer." The Kings banned soccer, but they couldn't take away people's love for the game. People developed soccer over time and now you can enjoy the sport!</p>
+    <p>In soccer games, two teams of eleven players use a ball to score goals. People in the Middle Ages played soccer almost the same way, but there were big differences. Villages played against each other, and everyone in the village could join one team! Some teams had 300 to 500 players. The players tried to take the ball to their villages to win. They wrestled, punched, and kicked to win because there were no rules to control the game. They could use any aggressive behavior, so a lot of people were hurt. Sometimes, the games lasted all day. In 1365, King Edward III stopped the games because they became too <span class="blank-in-text">( 빈칸 )</span>. King James I of Scotland also announced in 1424, "No man shall play soccer."</p>
+    <p>The Kings banned soccer, but they couldn't take away people's love for the game. People developed soccer over time and now you can enjoy the sport!</p>
+    <p style="font-size:12px; color:#888; margin-top:10px;">* announce 발표하다, 알리다 &nbsp; ban 금지하다</p>
   </div>
 
   <div class="section">
@@ -223,7 +225,7 @@
     <h2>📝 정답 및 해설</h2>
     <div class="answer-item"><strong>1.</strong> ⑤ dangerous<span class="explain">→ 폭력적 행동(wrestled, punched, kicked)으로 많은 사람이 다쳤다고 했으므로 "너무 위험해졌다"</span></div>
     <div class="answer-item"><strong>2.</strong> ⑤<span class="explain">→ 본문에 "the games lasted all day" — 경기 시간 제한이 없었음. ⑤는 일치하지 않음.</span></div>
-    <div class="answer-item"><strong>3.</strong> ① King James I of Scotland<span class="explain">→ "In 1424, King James I of Scotland also announced..." (King Edward III는 그 이전)</span></div>
+    <div class="answer-item"><strong>3.</strong> ① King James I of Scotland<span class="explain">→ "King James I of Scotland also announced in 1424, 'No man shall play soccer.'" (1365년에는 King Edward III가 경기를 중단시킴)</span></div>
     <div class="answer-item"><strong>4.</strong> ④ 300–500명<span class="explain">→ "Some teams had 300 to 500 players."</span></div>
     <div class="answer-item"><strong>5.</strong> rules<span class="explain">→ "there were no rules to control the game"</span></div>
     <div class="answer-item"><strong>6.</strong> control<span class="explain">→ "no rules to control the game"</span></div>
@@ -317,34 +319,4 @@
         await navigator.share({title: "More Reading 2 시험 결과", text: lastResult});
         showToast("✅ 공유 완료!");
         return;
-      } catch (err) { if (err.name === "AbortError") return; }
-    }
-    try {
-      await navigator.clipboard.writeText(lastResult);
-      showToast("📋 결과가 복사되었습니다! 카톡에 붙여넣기 해주세요.");
-      setTimeout(() => {
-        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-        if (isMobile) window.location.href = "kakaotalk://";
-        else window.open("https://accounts.kakao.com/login", "_blank");
-      }, 1500);
-    } catch (err) {
-      const ta = document.createElement("textarea");
-      ta.value = lastResult;
-      ta.style.position = "fixed"; ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand("copy"); showToast("📋 결과가 복사되었습니다!"); }
-      catch (e) { showToast("❌ 복사 실패."); }
-      document.body.removeChild(ta);
-    }
-  }
-
-  function showToast(msg) {
-    const t = document.getElementById("toast");
-    t.textContent = msg;
-    t.classList.add("show");
-    setTimeout(() => t.classList.remove("show"), 3000);
-  }
-</script>
-</body>
-</html>
+      } catch (err) { if (err.name === "AbortError")
