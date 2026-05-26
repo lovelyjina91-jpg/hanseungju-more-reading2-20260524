@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 More Reading 2 - 한승주 추가 프린트 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Nanum+Myeongjo:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: #f0f2f5; margin: 0; padding: 20px; color: #222; line-height: 1.7; }
+  .container { max-width: 800px; margin: 0 auto; background: white; padding: 40px 50px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); border-radius: 8px; }
+  .header { border-bottom: 3px double #333; padding-bottom: 15px; margin-bottom: 25px; }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; }
+  .title-block h1 { margin: 0 0 4px 0; font-size: 22px; font-family: 'Nanum Myeongjo', serif; font-weight: 700; }
+  .title-block .subtitle { color: #555; font-size: 14px; }
+  .info-block { font-size: 14px; text-align: right; }
+  .info-block div { margin: 2px 0; }
+  .info-block input { padding: 4px 8px; border: 1px solid #999; border-radius: 4px; font-size: 13px; min-width: 60px; }
+  .passage-box { background: #fff8e1; border: 2px solid #f9a825; border-radius: 8px; padding: 18px 22px; margin: 20px 0 30px; font-size: 14px; line-height: 1.8; color: #4e342e; }
+  .passage-box h3 { margin: 0 0 10px 0; font-size: 14px; color: #6d4c00; }
+  .blank-in-text { display: inline-block; border-bottom: 1.5px solid #333; min-width: 80px; margin: 0 4px; text-align: center; font-weight: 700; color: #c62828; }
+  .section { margin-bottom: 30px; }
+  .section-title { background: #1565c0; color: white; padding: 8px 16px; font-weight: 700; font-size: 16px; border-radius: 4px 4px 0 0; display: inline-block; }
+  .section-desc { background: #e3f2fd; padding: 10px 16px; margin-bottom: 16px; font-size: 14px; border-radius: 0 4px 4px 4px; color: #0d47a1; }
+  .question { margin: 18px 0; padding: 16px 18px; background: #fafafa; border-left: 4px solid #1976d2; border-radius: 4px; transition: all 0.3s; }
+  .q-num { font-weight: 700; color: #1565c0; margin-right: 6px; }
+  .q-text { margin: 4px 0; }
+  .hint { color: #777; font-size: 13px; font-style: italic; }
+  .choices { list-style: none; padding-left: 14px; margin: 8px 0 0; }
+  .choices li { margin: 4px 0; }
+  .choice-num { display: inline-block; width: 22px; height: 22px; border: 1px solid #555; border-radius: 50%; text-align: center; line-height: 20px; margin-right: 8px; font-size: 13px; }
+  .ans-input { margin-top: 12px; padding-top: 10px; border-top: 1px dashed #bbb; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ans-input .ans-label { font-weight: 700; color: #1565c0; font-size: 14px; min-width: 60px; }
+  .ans-input input[type="text"] { flex: 1; min-width: 180px; padding: 8px 12px; border: 1.5px solid #90caf9; border-radius: 5px; font-size: 14px; font-family: inherit; background: white; }
+  .ans-input input[type="text"]:focus { outline: 2px solid #1976d2; border-color: #1976d2; }
+  .ans-input select { padding: 8px 14px; border: 1.5px solid #90caf9; border-radius: 5px; font-size: 14px; font-family: inherit; background: white; cursor: pointer; }
+  .footer-note { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #ddd; color: #888; font-size: 12px; }
+  .submit-zone { margin: 30px 0 10px; background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); border: 2px dashed #f57f17; border-radius: 10px; padding: 20px 24px; text-align: center; }
+  .submit-zone .hint-text { color: #6d4c00; font-size: 13px; margin-bottom: 12px; }
+  .grade-btn { width: 100%; background: #ef6c00; color: white; border: none; padding: 14px; font-size: 16px; font-weight: 700; border-radius: 6px; cursor: pointer; font-family: inherit; }
+  .grade-btn:hover { background: #e65100; }
+  .result-card { display: none; margin: 20px 0; background: white; border: 2px solid #1565c0; border-radius: 10px; padding: 24px 28px; }
+  .result-card.show { display: block; }
+  .result-card h2 { margin: 0 0 12px 0; color: #0d47a1; text-align: center; }
+  .score-display { text-align: center; margin: 18px 0; }
+  .score-display .score { font-size: 48px; font-weight: 700; color: #1565c0; font-family: 'Nanum Myeongjo', serif; }
+  .score-display .total { font-size: 24px; color: #888; }
+  .score-display .label { display: block; font-size: 14px; color: #555; margin-top: 4px; }
+  .result-list { list-style: none; padding: 0; margin: 16px 0; }
+  .result-list li { padding: 8px 12px; margin: 4px 0; border-radius: 4px; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+  .result-list li.correct { background: #e8f5e9; border-left: 4px solid #2e7d32; }
+  .result-list li.wrong { background: #ffebee; border-left: 4px solid #c62828; }
+  .result-list .qn { font-weight: 700; min-width: 30px; }
+  .result-list .mark { font-size: 18px; min-width: 24px; }
+  .result-list .your-ans { color: #555; font-size: 13px; flex: 1; }
+  .send-btn { display: block; width: 100%; background: #FEE500; color: #3C1E1E; border: none; padding: 16px; font-size: 16px; font-weight: 700; border-radius: 8px; cursor: pointer; font-family: inherit; margin-top: 12px; }
+  .send-btn:hover { background: #f4d800; }
+  .send-help { text-align: center; color: #666; font-size: 12px; margin-top: 8px; }
+  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #333; color: white; padding: 12px 24px; border-radius: 30px; font-size: 14px; opacity: 0; transition: opacity 0.3s; z-index: 1000; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  .toggle-answer { margin: 30px 0 10px; text-align: center; }
+  .toggle-answer button { background: #2e7d32; color: white; border: none; padding: 12px 24px; font-size: 15px; font-weight: 700; border-radius: 6px; cursor: pointer; font-family: inherit; }
+  .toggle-answer button:hover { background: #1b5e20; }
+  .answer-section { display: none; background: #f1f8e9; border: 2px solid #689f38; border-radius: 8px; padding: 24px 30px; margin-top: 20px; }
+  .answer-section.show { display: block; }
+  .answer-section h2 { color: #33691e; border-bottom: 2px solid #689f38; padding-bottom: 8px; margin-top: 0; }
+  .answer-item { margin: 10px 0; padding: 8px 12px; background: white; border-radius: 4px; }
+  .answer-item strong { color: #1565c0; }
+  .answer-item .explain { display: block; color: #555; font-size: 13px; margin-top: 4px; padding-left: 18px; }
+  .question.graded-correct { border-left-color: #2e7d32; background: #f1f8e9; }
+  .question.graded-wrong { border-left-color: #c62828; background: #ffebee; }
+  .grade-mark { display: inline-block; font-size: 18px; margin-left: 8px; }
+  @media print { body { background: white; padding: 0; } .container { box-shadow: none; padding: 20px; } .toggle-answer, .submit-zone, .result-card, .ans-input { display: none !important; } .answer-section { display: block !important; page-break-before: always; } }
+  @media (max-width: 600px) { .container { padding: 20px; } body { padding: 10px; } }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="header-top">
+      <div class="title-block">
+        <h1>Lesson 3 · More Reading 2</h1>
+        <div class="subtitle">Medieval Soccer (중세 시대의 축구) — 한승주 추가 프린트 ⑤</div>
+      </div>
+      <div class="info-block">
+        <div>2학년 <input type="text" id="studentClass" placeholder="반" style="width:50px;">반 <input type="text" id="studentNo" placeholder="번호" style="width:50px;">번</div>
+        <div>이름: <input type="text" id="studentName" value="한승주" style="min-width:120px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="passage-box">
+    <h3>★ 다음 글을 읽고, 물음에 답해 봅시다.</h3>
+    <p>Many people all over the world have played soccer for a long time. But did you know that people in Europe couldn't play soccer at certain times during the Middle Ages?</p>
+    <p>In soccer games, two teams of eleven players use a ball to score goals. People in the Middle Ages played soccer almost the same way, but there were big differences. Villages played against each other, and everyone in the village could join one team! Some teams had 300 to 500 players. The players tried to take the ball to their villages to win. They wrestled, punched, and kicked to win because there were no rules to control the game. Sometimes, the games lasted all day. They could use any aggressive behavior, so a lot of people were hurt. The games became too <span class="blank-in-text">( 빈칸 )</span>. King Edward III of Scotland also announced in 1424, "No man shall play soccer." The Kings banned soccer, but they couldn't take away people's love for the game. People developed soccer over time and now you can enjoy the sport!</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">문제 1–4 (객관식)</div>
+    <div class="section-desc">윗글을 바탕으로 다음 문제에 답하시오.</div>
+
+    <div class="question" id="q1">
+      <div class="q-text"><span class="q-num">1.</span> 윗글의 빈칸 ( 빈칸 )에 들어갈 말로 가장 알맞은 것은?</div>
+      <ul class="choices">
+        <li><span class="choice-num">①</span> easy</li>
+        <li><span class="choice-num">②</span> exciting</li>
+        <li><span class="choice-num">③</span> boring</li>
+        <li><span class="choice-num">④</span> safe</li>
+        <li><span class="choice-num">⑤</span> dangerous</li>
+      </ul>
+      <div class="ans-input"><span class="ans-label">✏️ 내 답:</span>
+        <select id="a1"><option value="">번호 선택</option><option value="1">①</option><option value="2">②</option><option value="3">③</option><option value="4">④</option><option value="5">⑤</option></select>
+      </div>
+    </div>
+
+    <div class="question" id="q2">
+      <div class="q-text"><span class="q-num">2.</span> 중세 시대의 축구에 대한 설명 중 윗글의 내용과 일치하지 <strong>않는</strong> 것은?</div>
+      <ul class="choices">
+        <li><span class="choice-num">①</span> 마을별로 한 팀이 되어 축구 경기를 했다.</li>
+        <li><span class="choice-num">②</span> 선수의 수 제한이 없었다.</li>
+        <li><span class="choice-num">③</span> 경기에 이기기 위해 공을 상대 팀 마을로 가져갔다.</li>
+        <li><span class="choice-num">④</span> 폭력적인 행동을 할 수 있었다.</li>
+        <li><span class="choice-num">⑤</span> 경기 시간에 제한이 있었다.</li>
+      </ul>
+      <div class="ans-input"><span class="ans-label">✏️ 내 답:</span>
+        <select id="a2"><option value="">번호 선택</option><option value="1">①</option><option value="2">②</option><option value="3">③</option><option value="4">④</option><option value="5">⑤</option></select>
+      </div>
+    </div>
+
+    <div class="question" id="q3">
+      <div class="q-text"><span class="q-num">3.</span> 1424년에 "No man shall play soccer."라고 선언한 인물은?</div>
+      <ul class="choices">
+        <li><span class="choice-num">①</span> King James I of Scotland</li>
+        <li><span class="choice-num">②</span> King Edward III of Scotland</li>
+        <li><span class="choice-num">③</span> King James I of England</li>
+        <li><span class="choice-num">④</span> King Edward III of England</li>
+      </ul>
+      <div class="ans-input"><span class="ans-label">✏️ 내 답:</span>
+        <select id="a3"><option value="">번호 선택</option><option value="1">①</option><option value="2">②</option><option value="3">③</option><option value="4">④</option></select>
+      </div>
+    </div>
+
+    <div class="question" id="q4">
+      <div class="q-text"><span class="q-num">4.</span> 중세 축구 한 팀의 선수 수로 본문에 언급된 것은?</div>
+      <ul class="choices">
+        <li><span class="choice-num">①</span> 11명</li>
+        <li><span class="choice-num">②</span> 50–100명</li>
+        <li><span class="choice-num">③</span> 100–200명</li>
+        <li><span class="choice-num">④</span> 300–500명</li>
+      </ul>
+      <div class="ans-input"><span class="ans-label">✏️ 내 답:</span>
+        <select id="a4"><option value="">번호 선택</option><option value="1">①</option><option value="2">②</option><option value="3">③</option><option value="4">④</option></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">문제 5–7 (빈칸/단어 찾아 쓰기)</div>
+    <div class="section-desc">윗글의 내용과 일치하도록 빈칸에 알맞은 말을 본문에서 찾아 쓰시오.</div>
+
+    <div class="question" id="q5">
+      <div class="q-text"><span class="q-num">5.</span> During soccer games in the Middle Ages, a lot of people were hurt because there were no ____ to ____ the game. <span class="hint">(본문에서 2단어를 찾아 순서대로)</span></div>
+      <div class="ans-input"><span class="ans-label">✏️ 첫 단어:</span><input type="text" id="a5" placeholder="답을 입력하세요"></div>
+    </div>
+
+    <div class="question" id="q6">
+      <div class="q-text"><span class="q-num">6.</span> 위 5번 문장의 두 번째 빈칸에 들어갈 단어는?</div>
+      <div class="ans-input"><span class="ans-label">✏️ 두 번째 단어:</span><input type="text" id="a6" placeholder="답을 입력하세요"></div>
+    </div>
+
+    <div class="question" id="q7">
+      <div class="q-text"><span class="q-num">7.</span> The Kings ____ soccer in the Middle Ages. <span class="hint">("금지했다"에 해당하는 단어 한 단어)</span></div>
+      <div class="ans-input"><span class="ans-label">✏️ 단어:</span><input type="text" id="a7" placeholder="답을 입력하세요"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">문제 8 (영어 단어 뜻 쓰기)</div>
+    <div class="section-desc">본문에 등장한 단어의 우리말 뜻을 쓰시오.</div>
+
+    <div class="question" id="q8">
+      <div class="q-text"><span class="q-num">8.</span> aggressive</div>
+      <div class="ans-input"><span class="ans-label">✏️ 우리말 뜻:</span><input type="text" id="a8" placeholder="답을 입력하세요"></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">문제 9–10 (서술형 / 영작)</div>
+    <div class="section-desc">우리말과 일치하도록 영작하시오.</div>
+
+    <div class="question" id="q9">
+      <div class="q-text"><span class="q-num">9.</span> 본문에 따르면, 왕들이 축구를 금지했음에도 사람들의 축구에 대한 사랑은 어떻게 되었는가? (우리말로 답)</div>
+      <div class="ans-input"><span class="ans-label">✏️ 답변:</span><input type="text" id="a9" placeholder="답을 입력하세요"></div>
+    </div>
+
+    <div class="question" id="q10">
+      <div class="q-text"><span class="q-num">10.</span> 영작: "사람들은 시간이 지나면서 축구를 발전시켜 왔다." <span class="hint">(People, develop, soccer, over time / 현재완료)</span></div>
+      <div class="ans-input"><span class="ans-label">✏️ 영작:</span><input type="text" id="a10" placeholder="영어로 문장을 완성하세요"></div>
+    </div>
+  </div>
+
+  <div class="submit-zone">
+    <div class="hint-text">모든 답을 작성했나요? 아래 버튼을 눌러 채점하고 결과를 선생님께 보내세요!</div>
+    <button class="grade-btn" onclick="gradeAnswers()">📝 채점하기</button>
+  </div>
+
+  <div id="resultCard" class="result-card">
+    <h2>📊 채점 결과</h2>
+    <div class="score-display">
+      <span class="score" id="scoreNum">0</span><span class="total"> / 10</span>
+      <span class="label" id="scoreLabel">점</span>
+    </div>
+    <ul class="result-list" id="resultList"></ul>
+    <button class="send-btn" onclick="sendToKakao()">💬 카톡으로 선생님께 결과 보내기</button>
+    <div class="send-help">※ 모바일: 카톡이 공유 메뉴에 표시됩니다.<br>※ PC: 결과가 자동 복사되어 카톡에 붙여넣기 할 수 있어요.</div>
+  </div>
+
+  <div class="toggle-answer">
+    <button onclick="document.getElementById('answers').classList.toggle('show'); this.textContent = this.textContent.includes('보기') ? '🙈 정답 숨기기' : '✅ 정답 및 해설 보기';">✅ 정답 및 해설 보기</button>
+  </div>
+
+  <div id="answers" class="answer-section">
+    <h2>📝 정답 및 해설</h2>
+    <div class="answer-item"><strong>1.</strong> ⑤ dangerous<span class="explain">→ 폭력적 행동(wrestled, punched, kicked)으로 많은 사람이 다쳤다고 했으므로 "너무 위험해졌다"</span></div>
+    <div class="answer-item"><strong>2.</strong> ⑤<span class="explain">→ 본문에 "the games lasted all day" — 경기 시간 제한이 없었음. ⑤는 일치하지 않음.</span></div>
+    <div class="answer-item"><strong>3.</strong> ① King James I of Scotland<span class="explain">→ "In 1424, King James I of Scotland also announced..." (King Edward III는 그 이전)</span></div>
+    <div class="answer-item"><strong>4.</strong> ④ 300–500명<span class="explain">→ "Some teams had 300 to 500 players."</span></div>
+    <div class="answer-item"><strong>5.</strong> rules<span class="explain">→ "there were no rules to control the game"</span></div>
+    <div class="answer-item"><strong>6.</strong> control<span class="explain">→ "no rules to control the game"</span></div>
+    <div class="answer-item"><strong>7.</strong> banned<span class="explain">→ "The Kings banned soccer" (금지하다)</span></div>
+    <div class="answer-item"><strong>8.</strong> 공격적인, 폭력적인<span class="explain">→ aggressive behavior = 공격적인/폭력적인 행동</span></div>
+    <div class="answer-item"><strong>9.</strong> 빼앗을 수 없었다 / 계속되었다<span class="explain">→ "they couldn't take away people's love for the game" - 사람들의 축구 사랑을 빼앗지 못함</span></div>
+    <div class="answer-item"><strong>10.</strong> People have developed soccer over time.<span class="explain">→ 현재완료 have + p.p. (develop → developed)</span></div>
+  </div>
+
+  <div class="footer-note">
+    문제 출제: Lesson 3 More Reading 2 · 총 10문항 · 한승주 학생 추가 학습 자료 ⑤<br>
+    🖨️ 인쇄 시 정답은 마지막 페이지에 자동 포함됩니다.
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  const answerKey = {
+    1: { accept: ["5"], display: "⑤ dangerous" },
+    2: { accept: ["5"], display: "⑤ (경기 시간 제한 없음, 'lasted all day')" },
+    3: { accept: ["1"], display: "① King James I of Scotland" },
+    4: { accept: ["4"], display: "④ 300–500명" },
+    5: { accept: ["rules"], display: "rules" },
+    6: { accept: ["control"], display: "control" },
+    7: { accept: ["banned"], display: "banned" },
+    8: { accept: ["공격적인", "폭력적인", "공격적인, 폭력적인", "공격적", "폭력적"], display: "공격적인, 폭력적인" },
+    9: { accept: ["빼앗을 수 없었다", "빼앗지 못했다", "계속되었다", "사라지지 않았다", "줄어들지 않았다", "그대로였다"], display: "빼앗을 수 없었다 / 변하지 않았다" },
+    10: { accept: [
+      "people have developed soccer over time",
+      "people have developed soccer over time."
+    ], display: "People have developed soccer over time." }
+  };
+  let lastResult = null;
+  function normalize(s) { return (s||"").trim().toLowerCase().replace(/[.,!?]/g,"").replace(/\s+/g," "); }
+  function checkAnswer(qn, ua) { if (!ua || !ua.toString().trim()) return false; const n = normalize(ua); return answerKey[qn].accept.some(a => normalize(a) === n); }
+
+  function gradeAnswers() {
+    const name = document.getElementById("studentName").value.trim() || "(이름 미입력)";
+    const cls = document.getElementById("studentClass").value.trim();
+    const no = document.getElementById("studentNo").value.trim();
+    let score = 0;
+    const results = [];
+    for (let i = 1; i <= 10; i++) {
+      const qEl = document.getElementById("q" + i);
+      qEl.classList.remove("graded-correct", "graded-wrong");
+      const oldMark = qEl.querySelector(".grade-mark");
+      if (oldMark) oldMark.remove();
+    }
+    for (let i = 1; i <= 10; i++) {
+      const ua = document.getElementById("a" + i).value;
+      const ok = checkAnswer(i, ua);
+      if (ok) score++;
+      results.push({qn: i, user: ua || "(미입력)", correct: ok, answer: answerKey[i].display});
+      const qEl = document.getElementById("q" + i);
+      qEl.classList.add(ok ? "graded-correct" : "graded-wrong");
+      const lbl = qEl.querySelector(".ans-input .ans-label");
+      const m = document.createElement("span");
+      m.className = "grade-mark";
+      m.textContent = ok ? "⭕" : "❌";
+      lbl.appendChild(m);
+    }
+    document.getElementById("scoreNum").textContent = score;
+    let lbl = "점";
+    if (score === 10) lbl = "🎉 만점! 완벽해요!";
+    else if (score >= 8) lbl = "👍 잘했어요!";
+    else if (score >= 6) lbl = "💪 조금만 더 분발!";
+    else lbl = "📚 다시 복습해봐요!";
+    document.getElementById("scoreLabel").textContent = lbl;
+    const listEl = document.getElementById("resultList");
+    listEl.innerHTML = "";
+    results.forEach(r => {
+      const li = document.createElement("li");
+      li.className = r.correct ? "correct" : "wrong";
+      li.innerHTML = '<span class="qn">' + r.qn + '번</span><span class="mark">' + (r.correct ? "⭕" : "❌") + '</span><span class="your-ans">내 답: ' + r.user + (!r.correct ? '<br><small style="color:#c62828">정답: ' + r.answer + '</small>' : '') + '</span>';
+      listEl.appendChild(li);
+    });
+    const now = new Date();
+    const ds = now.getFullYear()+"."+String(now.getMonth()+1).padStart(2,"0")+"."+String(now.getDate()).padStart(2,"0")+" "+String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+    const wl = results.filter(r => !r.correct).map(r => r.qn + "번").join(", ") || "없음";
+    lastResult = "📚 [More Reading 2 시험 결과]\n\n👤 학생: " + name + (cls ? " (" + cls + "반 " + no + "번)" : "") + "\n📅 응시: " + ds + "\n📖 단원: Lesson 3 More Reading 2 (10문제)\n\n🎯 점수: " + score + " / 10점 (" + (score*10) + "점)\n❌ 틀린 문제: " + wl + "\n\n— 상세 답안 —\n" + results.map(r => r.qn + ". " + (r.correct ? "⭕" : "❌") + " 내답: " + r.user + (!r.correct ? " | 정답: " + r.answer : "")).join("\n") + "\n\n선생님, 채점 확인 부탁드려요! 🙇";
+    const rc = document.getElementById("resultCard");
+    rc.classList.add("show");
+    rc.scrollIntoView({behavior: "smooth", block: "start"});
+  }
+
+  async function sendToKakao() {
+    if (!lastResult) { showToast("먼저 채점하기를 눌러주세요!"); return; }
+    if (navigator.share) {
+      try {
+        await navigator.share({title: "More Reading 2 시험 결과", text: lastResult});
+        showToast("✅ 공유 완료!");
+        return;
+      } catch (err) { if (err.name === "AbortError") return; }
+    }
+    try {
+      await navigator.clipboard.writeText(lastResult);
+      showToast("📋 결과가 복사되었습니다! 카톡에 붙여넣기 해주세요.");
+      setTimeout(() => {
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isMobile) window.location.href = "kakaotalk://";
+        else window.open("https://accounts.kakao.com/login", "_blank");
+      }, 1500);
+    } catch (err) {
+      const ta = document.createElement("textarea");
+      ta.value = lastResult;
+      ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); showToast("📋 결과가 복사되었습니다!"); }
+      catch (e) { showToast("❌ 복사 실패."); }
+      document.body.removeChild(ta);
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 3000);
+  }
+</script>
+</body>
+</html>
