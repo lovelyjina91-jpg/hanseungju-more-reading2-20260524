@@ -214,11 +214,11 @@
     </div>
     <ul class="result-list" id="resultList"></ul>
     <button class="send-btn" onclick="sendToKakao()">💬 카톡으로 선생님께 결과 보내기</button>
-    <div class="send-help">※ 모바일: 카톡이 공유 메뉴에 표시됩니다.<br>※ PC: 결과가 자동 복사되어 카톡에 붙여넣기 할 수 있어요.</div>
+    <div class="send-help">※ 모바일: 카톡이 공유 메뉴에 표시됩니다.<br>※ PC: 결과가 자동 복사되어 카톡에 붙여넣기 할 수 있어요.</div>\n    <div style="text-align:center; margin-top:14px; font-size:15px; font-weight:bold; color:#4a7c59;">수고했습니당 ~~~ ㅎㅎㅎ</div>
   </div>
 
   <div class="toggle-answer">
-    <button onclick="document.getElementById('answers').classList.toggle('show'); this.textContent = this.textContent.includes('보기') ? '🙈 정답 숨기기' : '✅ 정답 및 해설 보기';">✅ 정답 및 해설 보기</button>
+    <button id="answerToggleBtn" onclick="if(!lastResult){showToast('모든 문제를 풀고 채점한 뒤에 볼 수 있어요!');return;} document.getElementById('answers').classList.toggle('show'); this.textContent = this.textContent.includes('보기') ? '🙈 정답 숨기기' : '✅ 정답 및 해설 보기';">✅ 정답 및 해설 보기 (채점 후 열람 가능)</button>
   </div>
 
   <div id="answers" class="answer-section">
@@ -306,7 +306,7 @@
     const now = new Date();
     const ds = now.getFullYear()+"."+String(now.getMonth()+1).padStart(2,"0")+"."+String(now.getDate()).padStart(2,"0")+" "+String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
     const wl = results.filter(r => !r.correct).map(r => r.qn + "번").join(", ") || "없음";
-    lastResult = "📚 [More Reading 2 시험 결과]\n\n👤 학생: " + name + (cls ? " (" + cls + "반 " + no + "번)" : "") + "\n📅 응시: " + ds + "\n📖 단원: Lesson 3 More Reading 2 (10문제)\n\n🎯 점수: " + score + " / 10점 (" + (score*10) + "점)\n❌ 틀린 문제: " + wl + "\n\n— 상세 답안 —\n" + results.map(r => r.qn + ". " + (r.correct ? "⭕" : "❌") + " 내답: " + r.user + (!r.correct ? " | 정답: " + r.answer : "")).join("\n") + "\n\n선생님, 채점 확인 부탁드려요! 🙇";
+    lastResult = "📚 [More Reading 2 시험 결과]\n\n👤 학생: " + name + (cls ? " (" + cls + "반 " + no + "번)" : "") + "\n📅 응시: " + ds + "\n📖 단원: Lesson 3 More Reading 2 (10문제)\n\n🎯 점수: " + score + " / 10점 (" + (score*10) + "점)\n❌ 틀린 문제: " + wl + "\n\n— 상세 답안 —\n" + results.map(r => r.qn + ". " + (r.correct ? "⭕" : "❌") + " 내답: " + r.user + (!r.correct ? " | 정답: " + r.answer : "")).join("\n") + "\n\n선생님, 채점 확인 부탁드려요! 🙇\n수고했습니당 ~~~ ㅎㅎㅎ";
     const rc = document.getElementById("resultCard");
     rc.classList.add("show");
     rc.scrollIntoView({behavior: "smooth", block: "start"});
@@ -314,9 +314,79 @@
 
   async function sendToKakao() {
     if (!lastResult) { showToast("먼저 채점하기를 눌러주세요!"); return; }
-    if (navigator.share) {
+    // 모바일: 공유 메뉴 (카카오톡 선택 가능)
+    if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
       try {
-        await navigator.share({title: "More Reading 2 시험 결과", text: lastResult});
+        await navigator.share({ title: "More Reading 2 시험 결과", text: lastResult });
         showToast("✅ 공유 완료!");
         return;
-      } catch (err) { if (err.name === "AbortError")
+      } catch (err) {
+        if (err.name === "AbortError") return; // 사용자가 취소
+        // 공유 실패 시 복사로 폴백
+      }
+    }
+    // PC 또는 공유 실패: 클립보드 복사
+    copyText(lastResult);
+  }
+
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text)
+        .then(() => showToast("✅ 결과가 복사되었습니다! 카톡에 붙여넣기 하세요."))
+        .catch(() => fallbackCopy(text));
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand("copy");
+      showToast("✅ 결과가 복사되었습니다! 카톡에 붙여넣기 하세요.");
+    } catch (e) {
+      showToast("❌ 복사 실패 — 결과를 직접 드래그해서 복사해주세요.");
+    }
+    document.body.removeChild(ta);
+  }
+
+  let toastTimer = null;
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove("show"), 2500);
+  }
+
+  // ===== 키보드 편의 기능 =====
+  // 객관식(select): 숫자키 1~5로 바로 선택
+  document.querySelectorAll("select[id^='a']").forEach(sel => {
+    sel.addEventListener("keydown", e => {
+      if (e.key >= "1" && e.key <= "9") {
+        const opt = [...sel.options].find(o => o.value === e.key);
+        if (opt) { sel.value = e.key; e.preventDefault(); focusNext(sel); }
+      } else if (e.key === "Enter") { e.preventDefault(); focusNext(sel); }
+    });
+  });
+  // 주관식 입력: 엔터 → 다음 문항, 마지막이면 채점
+  document.querySelectorAll("input[id^='a']").forEach(inp => {
+    inp.addEventListener("keydown", e => {
+      if (e.key === "Enter") { e.preventDefault(); focusNext(inp); }
+    });
+  });
+  function focusNext(el) {
+    const n = parseInt(el.id.slice(1), 10);
+    if (n >= 10) { gradeAnswers(); return; }
+    const next = document.getElementById("a" + (n + 1));
+    if (next) { next.focus(); next.scrollIntoView({ behavior: "smooth", block: "center" }); }
+  }
+</script>
+</body>
+</html>
